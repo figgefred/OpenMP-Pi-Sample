@@ -47,7 +47,7 @@ int main (int argc, char *argv[])
   omp_set_num_threads(threadcount);
 
   int i;
-  double x, pi, sum = 0.0;
+  double pi, sum = 0.0;
   double start_time, run_time;
 
   step = 1.0/(double) num_steps;
@@ -59,7 +59,7 @@ int main (int argc, char *argv[])
 
   // Array where the partial results are going to be stored.
   double result[threadcount];
-
+int counter = 0;
   #pragma omp parallel
   {
     int myId = omp_get_thread_num();
@@ -67,6 +67,7 @@ int main (int argc, char *argv[])
     // Thread id is used to calculate the region that the current thread will calculate over.
     int index = myId*chunk;
     int end = index+chunk;
+    double x;
     if(myId == threadcount-1 && end % 2 != 0)
     {
       end += 1;
@@ -79,16 +80,16 @@ int main (int argc, char *argv[])
         x = (index-0.5)*step;
         result[myId] +=  4.0/(1.0+x*x);
     }
-    result[myId] = result[myId]*step;
   }
 
   // Main thread adds together the partial results.
   for(i = 0; i < threadcount; i++)
   {
-    pi += result[i];
+    pi += result[i]*step;
   }
 
   run_time = omp_get_wtime() - start_time;
+  printf("Threads iterated a total of %i times", counter);
   printf("\n pi = %d (%f steps). ", pi,num_steps);
   printf("\n Executed for %f seconds. (%i threads) \n\n",run_time, threadcount);
 }

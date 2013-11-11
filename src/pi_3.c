@@ -44,17 +44,18 @@ int main (int argc, char *argv[])
   omp_set_num_threads(threadcount);
 
 
-  int i;
-  double x, pi, sum = 0.0;
+  
+  double pi, sum = 0.0;
   double start_time, run_time;
+  
+  int granularity = num_steps/threadcount;
 
   step = 1.0/(double) num_steps;
-
   start_time = omp_get_wtime();
-
-  #pragma parallel omp for reduction(+:sum) schedule(DYNAMIC)
+  int i;
+  #pragma parallel omp for reduction(+:sum) schedule(static, 100000)
     for (i = 0; (i< num_steps); i+=1){
-        x = (i-0.5)*step;
+        double x = (i-0.5)*step;
         sum +=  4.0/(1.0+x*x);
     }
   pi += sum*step;

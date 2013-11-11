@@ -59,13 +59,14 @@ int main (int argc, char *argv[])
   int chunk = num_steps/threadcount;
 
   double partSum =0.0;
-  #pragma omp parallel private(partSum) // Priavte assignment of a resp. partSum to all threads
+  #pragma omp parallel private(partSum, x) // Priavte assignment of a resp. partSum to all threads
   {
     int myId = omp_get_thread_num();
 
     // Thread id is used to calculate the region that the current thread will calculate over.
     int index = myId*chunk;
     int end = index+chunk;
+
     if(myId == threadcount-1 && end % 2 != 0)
     {
       end += 1;
