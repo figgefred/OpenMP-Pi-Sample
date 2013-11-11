@@ -73,7 +73,7 @@ int main (int argc, char *argv[])
     }
 
     // Some status of current thread
-    printf("Thread-%i: plans to iterate %i times.\n", myId, (end-index));
+    //printf("Thread-%i: plans to iterate %i times.\n", myId, (end-index));
     
     // Current loop is completely independent of other threads
     for (; (index< num_steps) && index < end; index+=1){

@@ -59,6 +59,9 @@ int main (int argc, char *argv[])
 
   // Array where the partial results are going to be stored.
   double result[threadcount];
+
+
+
 int counter = 0;
   #pragma omp parallel
   {
@@ -73,7 +76,7 @@ int counter = 0;
       end += 1;
     }
 
-    printf("Thread-%i: plans to iterate %i times.\n", myId, (end-index));
+    //printf("Thread-%i: plans to iterate %i times.\n", myId, (end-index));
 
     // Current loop is completely independent of other threads
     for (; (index< num_steps) && index < end; index+=1){
