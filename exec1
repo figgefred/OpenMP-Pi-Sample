@@ -14,7 +14,7 @@ then
 fi
 
 echo "Running sequential run..."
-./bin/pi $2 $N
+./bin/pi $N
 
 for ((i = 2; i <= $1; i++))
 do

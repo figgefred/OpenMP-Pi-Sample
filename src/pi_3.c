@@ -42,7 +42,6 @@ int main (int argc, char *argv[])
     exit(0);
   }
   omp_set_num_threads(threadcount);
-  printf("Running on %i threads.\n\n", omp_get_num_threads());
 
 
   int i;
@@ -53,7 +52,7 @@ int main (int argc, char *argv[])
 
   start_time = omp_get_wtime();
 
-  #pragma parallel omp for reduction(+:sum)
+  #pragma parallel omp for reduction(+:sum) schedule(DYNAMIC)
     for (i = 0; (i< num_steps); i+=1){
         x = (i-0.5)*step;
         sum +=  4.0/(1.0+x*x);
@@ -69,8 +68,7 @@ int parse(int argc, char *argv[])
 
   if(argc < 2)
   {
-    printUsage();
-    return 0;
+    threadcount = omp_get_num_procs();
   }
   else if(argc == 2)
   {

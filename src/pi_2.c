@@ -45,7 +45,6 @@ int main (int argc, char *argv[])
     exit(0);
   }
   omp_set_num_threads(threadcount);
-  printf("Running on %i threads.\n\n", omp_get_num_threads());
 
 
   int i;
@@ -97,8 +96,7 @@ int parse(int argc, char *argv[])
 
   if(argc < 2)
   {
-    printUsage();
-    return 0;
+    threadcount = omp_get_num_procs();
   }
   else if(argc == 2)
   {

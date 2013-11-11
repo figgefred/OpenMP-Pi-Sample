@@ -15,13 +15,21 @@ History: Written by Tim Mattson, 11/99.
 
 */
 #include <stdio.h>
+#include <stdlib.h>
 #include <omp.h>
 static long num_steps = 100000000;
 
+int parse(int , char **);
+void printUsage();
 
 double step;
-int main ()
+int main (int argc, char *argv[])
 {
+  if(parse(argc, argv) == 0)
+  {
+    exit(0);
+  }
+
   int i;
   double x, pi, sum = 0.0;
   double start_time, run_time;
@@ -41,4 +49,28 @@ int main ()
 
   printf("\n pi = %d (%f steps). ", pi,num_steps);
   printf("\n Executed for %f seconds. (sequentially) \n\n",run_time);
+}
+
+int parse(int argc, char *argv[])
+{
+
+  if(argc < 2)
+  {
+    return 0;
+  }
+  else 
+  {
+    num_steps = strtol( argv[1], NULL, 10);
+  }
+  if(num_steps < 1)
+  {
+    printUsage();
+    return 0;
+  }
+  return 1;
+}
+
+void printUsage()
+{
+  printf("\nUsage: pi <num_steps> \n");
 }
