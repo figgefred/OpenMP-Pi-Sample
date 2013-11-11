@@ -35,6 +35,7 @@ static long int threadcount;
 void printUsage();
 int parse(int, char**);
 
+int diff = 0;
 
 double step;
 int main (int argc, char *argv[])
@@ -57,6 +58,11 @@ int main (int argc, char *argv[])
 
   // The size of workload
   int chunk = num_steps/threadcount;
+  if((chunk * threadcount) != num_steps)
+  {
+    // There Int rounded down. Lets add one more to be 'precise'
+    diff = num_steps-(chunk*threadcount);
+  }
 
   double partSum =0.0;
   #pragma omp parallel private(partSum, x) // Priavte assignment of a resp. partSum to all threads
@@ -67,9 +73,9 @@ int main (int argc, char *argv[])
     int index = myId*chunk;
     int end = index+chunk;
 
-    if(myId == threadcount-1 && end % 2 != 0)
+    if(myId == threadcount-1 && diff != 0)
     {
-      end += 1;
+      end += diff;
     }
 
     // Some status of current thread

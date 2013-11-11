@@ -15,8 +15,8 @@ fi
 
 echo "Running sequential run..."
 ./bin/pi $N
-
-for ((i = 2; i <= $1; i++))
+./bin/pi_3 1 $N
+for ((i = 2; i <= $1; i+=2))
 do
 	echo ""
 	echo "Running with $i threads..."

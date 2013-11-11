@@ -31,6 +31,9 @@ Implemented by: Frederick Ceder
 static long num_steps = 100000000;
 static long int threadcount;
 
+int diff = 0;
+
+
 void printUsage();
 int parse(int, char**);
 
@@ -56,6 +59,11 @@ int main (int argc, char *argv[])
 
   // The size of workload
   int chunk = num_steps/threadcount;
+  if((chunk * threadcount) != num_steps)
+  {
+    // There Int rounded down. Lets add one more to be 'precise'
+    diff = num_steps-(chunk*threadcount);
+  }
 
   // Array where the partial results are going to be stored.
   double result[threadcount];
@@ -71,12 +79,12 @@ int counter = 0;
     int index = myId*chunk;
     int end = index+chunk;
     double x;
-    if(myId == threadcount-1 && end % 2 != 0)
+    if(myId == threadcount-1 && diff != 0)
     {
-      end += 1;
+      end += diff;
     }
 
-    //printf("Thread-%i: plans to iterate %i times.\n", myId, (end-index));
+    //sprintf("Thread-%i: plans to iterate %i times.\n", myId, (end-index));
 
     // Current loop is completely independent of other threads
     for (; (index< num_steps) && index < end; index+=1){
