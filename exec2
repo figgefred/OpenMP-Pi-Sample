@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if  [[ $# < 1 ]] 
+then
+	echo "Usage: exec2 <max_thread_count> <num_steps>"
+	echo ""
+	exit 1
+fi
+
+N="100000000"
+if  [[ $# > 1 ]] 
+then
+	N=$2
+fi
+
+echo "Running sequential run..."
+./bin/pi $2 $N
+
+for ((i = 2; i <= $1; i++))
+do
+	echo ""
+	echo "Running with $i threads..."
+	./bin/pi_2 $i $N 
+done
