@@ -43,7 +43,6 @@ int main (int argc, char *argv[])
   }
   omp_set_num_threads(threadcount);
 
-
   
   double x, pi, sum = 0.0;
   double start_time, run_time;
@@ -51,11 +50,11 @@ int main (int argc, char *argv[])
   step = 1.0/(double) num_steps;
   start_time = omp_get_wtime();
   int i;
-  #pragma parallel omp for reduction(+:sum) private(x, sum)
-    for (i = 0; (i< num_steps); i+=1){
-        x = (i-0.5)*step;
+  #pragma omp parallel for private(x) reduction(+:sum)
+      for (i = 0; i< num_steps; i+=1){
+        double x = (i-0.5)*step;
         sum +=  4.0/(1.0+x*x);
-    }
+      }
   pi += sum*step;
   run_time = omp_get_wtime() - start_time;
   printf("\n pi = %d (%f steps). ", pi,num_steps);
